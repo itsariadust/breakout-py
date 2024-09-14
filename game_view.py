@@ -87,6 +87,9 @@ class GameView(arcade.View):
         self.player_list.append(self.player_sprite)
 
         self.level_one()
+
+    def on_show_view(self):
+        self.setup()
         
     def draw(self):
         self.block_list.draw()
@@ -95,15 +98,12 @@ class GameView(arcade.View):
     def on_draw(self):
         self.window.use()
         self.window.clear()
-        self.setup()
         self.draw()
 
     def on_update(self, delta_time):
-        """
-        All the logic to move, and the game logic goes here.
-        Normally, you'll call update() on the sprite lists that
-        need it.
-        """
+        """All the logic to move, and the game logic goes here."""
+        self.physics_engine.update()
+        self.player_list.update()
 
     def on_key_press(self, key, key_modifiers):
         """
