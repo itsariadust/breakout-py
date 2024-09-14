@@ -22,19 +22,21 @@ class GameView(arcade.View):
         self.death_pause = 0
         
         self.window.set_mouse_visible(False)
-        
+
+        arcade.set_viewport(0, 640, 0, 480)
+
         arcade.set_background_color(arcade.color.BLACK)
         
     def level_one(self):
-        block_columns = 14
+        block_columns = 18
         block_rows = 7
-        x_offset = 40
-        y_offset = 480 - (block_rows * 16) - 40
+        x_viewport_offset = 40
+        y_viewport_offset = 400
         
         for column in range(block_columns):
-            x = x_offset + (column * 40) + 20
+            x = x_viewport_offset + (column * 40) + 20
             for row in range(block_rows):
-                y = y_offset + ((block_rows - 1 - row) * 16) + 8
+                y = y_viewport_offset + ((block_rows - 1 - row) * 16) + 8
 
                 score = 0
 
