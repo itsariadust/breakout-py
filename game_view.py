@@ -1,5 +1,4 @@
 import arcade
-from arcade.color import WHITE
 
 from constants import *
 from block import BlockSprite
@@ -20,6 +19,8 @@ class GameView(arcade.View):
         self.score = 0
         self.lives = 3
         self.death_pause = 0
+
+        self.physics_engine = None
         
         self.window.set_mouse_visible(False)
 
@@ -81,10 +82,11 @@ class GameView(arcade.View):
         self.score = 0
 
         self.player_sprite = arcade.Sprite("assets/player.png", 1)
-        self.player_sprite.center_x = 320
+        self.player_sprite.center_x = 400
         self.player_sprite.center_y = 40 + (self.player_sprite.height / 2)
-        self.player_sprite.color = WHITE
         self.player_list.append(self.player_sprite)
+
+        self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.block_list)
 
         self.level_one()
 
@@ -105,17 +107,16 @@ class GameView(arcade.View):
         self.physics_engine.update()
         self.player_list.update()
 
-    def on_key_press(self, key, key_modifiers):
-        """
-        Called whenever a key on the keyboard is pressed.
+    def on_key_press(self, key, modifiers):
+        """Called whenever a key is pressed."""
+        if key == arcade.key.LEFT or key == arcade.key.A:
+            self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+        elif key == arcade.key.RIGHT or key == arcade.key.D:
+            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
 
-        For a full list of keys, see:
-        https://api.arcade.academy/en/latest/arcade.key.html
-        """
-        pass
-
-    def on_key_release(self, key, key_modifiers):
-        """
-        Called whenever the user lets off a previously pressed key.
-        """
-        pass
+    def on_key_release(self, key, modifiers):
+        """Called when the user releases a key."""
+        if key == arcade.key.LEFT or key == arcade.key.A:
+            self.player_sprite.change_x = 0
+        elif key == arcade.key.RIGHT or key == arcade.key.D:
+            self.player_sprite.change_x = 0
