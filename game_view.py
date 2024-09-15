@@ -1,5 +1,5 @@
 import arcade
-
+from pyglet.math import Vec2
 from constants import *
 from block import BlockSprite
 
@@ -24,8 +24,20 @@ class GameView(arcade.View):
             "right": False
         }
 
+        self.filter_on = False
+
+        # Physics engine var
         self.physics_engine = None
-        
+
+        self.crt_filter = arcade.experimental.CRTFilter(SCREEN_WIDTH, SCREEN_HEIGHT,
+                                                        resolution_down_scale=2.0,
+                                                        hard_scan=-8.0,
+                                                        hard_pix=-3.0,
+                                                        display_warp=Vec2(1.0 / 32.0, 1.0 / 24.0),
+                                                        mask_dark=0.5,
+                                                        mask_light=1.5)
+
+        # Makes the mouse cursor visible
         self.window.set_mouse_visible(True)
 
         arcade.set_viewport(0, 640, 0, 480)
@@ -123,9 +135,19 @@ class GameView(arcade.View):
         self.wall_list.draw()
 
     def on_draw(self):
-        self.window.use()
-        self.window.clear()
-        self.draw()
+        if self.filter_on:
+            self.crt_filter.use()
+            self.crt_filter.clear()
+            self.draw()
+
+            self.window.use()
+            self.window.clear()
+
+            self.crt_filter.draw()
+        else:
+            self.window.use()
+            self.window.clear()
+            self.draw()
 
     def on_update(self, delta_time):
         """Update game state"""
