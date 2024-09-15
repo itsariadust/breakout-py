@@ -19,6 +19,11 @@ class GameView(arcade.View):
         self.lives = 3
         self.death_pause = 0
 
+        self.key_state = {
+            "left": False,
+            "right": False
+        }
+
         self.physics_engine = None
         
         self.window.set_mouse_visible(True)
@@ -123,20 +128,26 @@ class GameView(arcade.View):
         self.draw()
 
     def on_update(self, delta_time):
-        """All the logic to move, and the game logic goes here."""
+        """Update game state"""
+        # Update player movement based on key state
+        if self.key_state["left"]:
+            self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+        elif self.key_state["right"]:
+            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+        else:
+            self.player_sprite.change_x = 0  # Stop if no key is pressed
+
         self.physics_engine.update()
         self.player_list.update()
 
     def on_key_press(self, key, modifiers):
-        """Called whenever a key is pressed."""
         if key == arcade.key.LEFT or key == arcade.key.A:
-            self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+            self.key_state["left"] = True
         elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+            self.key_state["right"] = True
 
     def on_key_release(self, key, modifiers):
-        """Called when the user releases a key."""
         if key == arcade.key.LEFT or key == arcade.key.A:
-            self.player_sprite.change_x = 0
+            self.key_state["left"] = False
         elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.player_sprite.change_x = 0
+            self.key_state["right"] = False
