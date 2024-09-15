@@ -10,9 +10,8 @@ class GameView(arcade.View):
 
         self.player_list = None
         self.block_list = None
-        
-        self.block_textures = None
-        
+        self.wall_list = None
+
         self.game_state = PLAY_GAME
         
         self.player_sprite = None
@@ -22,7 +21,7 @@ class GameView(arcade.View):
 
         self.physics_engine = None
         
-        self.window.set_mouse_visible(False)
+        self.window.set_mouse_visible(True)
 
         arcade.set_viewport(0, 640, 0, 480)
 
@@ -32,8 +31,9 @@ class GameView(arcade.View):
         block_columns = 18
         block_rows = 7
         x_viewport_offset = 40
-        y_viewport_offset = 400
-        
+        y_viewport_offset = 332
+
+        # Set up the blocks
         for column in range(block_columns):
             x = x_viewport_offset + (column * 40) + 20
             for row in range(block_rows):
@@ -72,12 +72,31 @@ class GameView(arcade.View):
 
                 self.block_list.append(block)
 
+        # Set up the wall
+        left_wall = arcade.Sprite("assets/left_wall.png",)
+        center_wall = arcade.Sprite("assets/center_wall.png")
+        right_wall = arcade.Sprite("assets/right_wall.png")
+
+        left_wall.center_x = 20
+        left_wall.center_y = 240
+
+        center_wall.center_x = 400
+        center_wall.center_y = 500
+
+        right_wall.center_x = 780
+        right_wall.center_y = 240
+
+        self.wall_list.append(left_wall)
+        self.wall_list.append(center_wall)
+        self.wall_list.append(right_wall)
+
     def setup(self):
         self.game_state = PLAY_GAME
 
         # Sprite List
         self.player_list = arcade.SpriteList()
         self.block_list = arcade.SpriteList()
+        self.wall_list = arcade.SpriteList()
 
         self.score = 0
 
@@ -86,9 +105,9 @@ class GameView(arcade.View):
         self.player_sprite.center_y = 40 + (self.player_sprite.height / 2)
         self.player_list.append(self.player_sprite)
 
-        self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.block_list)
-
         self.level_one()
+
+        self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.wall_list)
 
     def on_show_view(self):
         self.setup()
@@ -96,6 +115,7 @@ class GameView(arcade.View):
     def draw(self):
         self.block_list.draw()
         self.player_list.draw()
+        self.wall_list.draw()
 
     def on_draw(self):
         self.window.use()
