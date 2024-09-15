@@ -31,7 +31,7 @@ class GameView(arcade.View):
         block_columns = 18
         block_rows = 7
         x_viewport_offset = 40
-        y_viewport_offset = 332
+        y_viewport_offset = 380
 
         # Set up the blocks
         for column in range(block_columns):
@@ -78,13 +78,13 @@ class GameView(arcade.View):
         right_wall = arcade.Sprite("assets/right_wall.png")
 
         left_wall.center_x = 20
-        left_wall.center_y = 240
+        left_wall.center_y = 260
 
         center_wall.center_x = 400
-        center_wall.center_y = 500
+        center_wall.center_y = 540
 
         right_wall.center_x = 780
-        right_wall.center_y = 240
+        right_wall.center_y = 260
 
         self.wall_list.append(left_wall)
         self.wall_list.append(center_wall)
